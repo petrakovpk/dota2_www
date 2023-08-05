@@ -1,10 +1,11 @@
 /* Components */
-import { Counter } from './components/Counter/Counter'
+// import { Counter } from './components/Counter/Counter'
+import { TeamsSelector } from "./components/TeamsSelector/TeamsSelector"
 
 export default function IndexPage() {
-  return <Counter />
+  return <TeamsSelector/>
 }
 
 export const metadata = {
-  title: 'Redux Toolkit',
+  title: 'Dota 2 Laboratory',
 }

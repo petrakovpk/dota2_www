@@ -1,0 +1,28 @@
+table.table-bordered {
+    border: 1px solid #374151;
+    margin-top: 20px;
+}
+
+table.table-bordered>thead>tr>th {
+    border: 1px solid #374151;
+}
+
+table.table-bordered>tbody>tr>td {
+    border: 1px solid #374151;
+}
+
+.bg-purple {
+    background: rgb(48, 0, 50);
+}
+
+.bg-gray {
+    background: rgb(74, 74, 74);
+}
+
+.bg-blue {
+    background: rgb(50, 101, 196);
+}
+
+.bg-red {
+    background: rgb(196, 50, 53);
+}
