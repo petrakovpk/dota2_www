@@ -7,7 +7,8 @@ import { Html, Head, Main, NextScript } from 'next/document'
 /* Instruments */
 import styles from './styles/layout.module.css'
 import './styles/globals.css'
-import './styles/globals.scss';
+import './styles/globals.scss'
+import './components/TeamsSelector/teamsSelector.css'
 
 import { TeamsSelector } from './components/TeamsSelector/TeamsSelector'
 import { MainPage } from './components/MainPage/MainPage';
