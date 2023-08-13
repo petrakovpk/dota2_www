@@ -92,7 +92,7 @@ export const Result = () => {
                 <p className="text-left" style={{ fontWeight: 'bold' }}>Результат анализа</p>
             </Row>
             <Row>
-                <Col md={4}>
+                <Col xs={12} md={6}>
                     <Row>
                         <p className='text-center' style={{ fontWeight: 500 }}>Вероятность победы</p>
                     </Row>
@@ -100,34 +100,7 @@ export const Result = () => {
                         <Bar options={options} data={data} />
                     </Row>
                 </Col>
-                <Col md={5}>
-                    <Row>
-                        <p className='text-center' style={{ fontWeight: 500 }}>Сравнение команд</p>
-                    </Row>
-                    <Row>
-                        <Col md={6}>
-                            <Row>
-                                <p className='text-center'>Team Radiant</p>
-                            </Row>
-                            <ul>
-                                <li>Один</li>
-                                <li>Два</li>
-                                <li>Три</li>
-                            </ul>
-                        </Col>
-                        <Col md={6}>
-                            <Row>
-                                <p className='text-center'>Team Dire</p>
-                            </Row>
-                            <ul>
-                                <li>Четыре</li>
-                                <li>Пять</li>
-                                <li>Шесть</li>
-                            </ul>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col md={3} className='pagination-centered'>
+                <Col xs={12} md={6} className='pagination-centered'>
                     <Row>
                         <p className='text-center' style={{ fontWeight: 500 }}>Вероятные события матча</p>
                     </Row>

@@ -31,7 +31,7 @@ export const MainPage = () => {
                     <ModelSelector />
                 </Col>
                 <Col md={2} className='d-flex flex-column'>
-                    <div className='d-flex flex-column flex-grow-1 border border-black rounded justify-content-center align-items-center d-none d-sm-flex' style={{ flex: '70%' }}>
+                    <div className='d-flex flex-column flex-grow-1 justify-content-center align-items-center d-none d-sm-flex' style={{ flex: '70%' }}>
                         <Info />
                     </div>
                     <div className='flex-grow-1 mt-2' style={{ flex: '30%' }}>
