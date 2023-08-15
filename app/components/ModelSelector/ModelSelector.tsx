@@ -2,6 +2,9 @@
 
 import { useState } from 'react';
 
+import { useDispatch } from 'react-redux';
+import { calculateSlice } from '@/lib/redux';
+
 import {
     Button,
     Container,
@@ -13,9 +16,41 @@ import {
 
 
 export const ModelSelector = () => {
+    const dispatch = useDispatch();
+
+    type Model = {
+        name: string;
+        description: string;
+        accuracy: string;
+    };
+
+    const models = [
+        {
+            name: 'Stacked Ensamble',
+            description: 'Комбинация различных моделей для улучшения точности.',
+            accuracy: '62%'
+        },
+        {
+            name: 'Deep Learning',
+            description: 'Использует нейронные сети для обучения сложным паттернам в данных.',
+            accuracy: '65%'
+        },
+        {
+            name: 'GBM',
+            description: 'Gradient Boosting Machine, алгоритм, который строит модель предсказания в форме ансамбля слабых предсказательных моделей.',
+            accuracy: '63%'
+        }
+    ];
+
     const [isOpen, setIsOpen] = useState(true);
+    const [selectedModel, setSelectedModel] = useState<Model>(models[0]);
 
     const toggleClass = isOpen ? '' : 'd-none d-sm-flex';
+
+    const handleSelectModel = (model: Model) => {
+        setSelectedModel(model);
+        dispatch(calculateSlice.actions.setModel(model.name));
+    }
 
     return (
         <Container fluid="md" className='border border-black rounded h-100 p-3' style={{ backgroundColor: '#f8f9fa' }}>
@@ -39,12 +74,12 @@ export const ModelSelector = () => {
                     <Row>
                         <Dropdown className='d-flex flex-column '>
                             <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                                Модель не выбрана
+                                {selectedModel ? selectedModel.name : 'Модель не выбрана'}
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item href="#/action-1">Model 1</Dropdown.Item>
-                                <Dropdown.Item href="#/action-2">Model 2</Dropdown.Item>
-                                <Dropdown.Item href="#/action-3">Model 3</Dropdown.Item>
+                                {models.map((model, index) => (
+                                    <Dropdown.Item key={index} onClick={() => handleSelectModel(model)}>{model.name}</Dropdown.Item>
+                                ))}
                             </Dropdown.Menu>
                         </Dropdown>
                     </Row>
@@ -56,7 +91,7 @@ export const ModelSelector = () => {
                     </Row>
                     <Row>
                         <p>
-                            Это супер-пупер модель очень мощная
+                            {selectedModel ? selectedModel.description : 'Выберите модель для просмотра описания'}
                         </p>
                     </Row>
                 </Col>
@@ -81,9 +116,8 @@ export const ModelSelector = () => {
                     </Row>
                     <Row>
                         <ul>
-                            <li>Точность модели: 62%</li>
+                            <li>Точность модели: {selectedModel ? selectedModel.accuracy : 'N/A'}</li>
                             <li>Количество матчей для обучения: 10000</li>
-                            <li>Тип модели: оптимистичная</li>
                         </ul>
                     </Row>
 

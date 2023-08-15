@@ -12,6 +12,10 @@ import {
     useDispatch
 } from '@/lib/redux'
 
+import { 
+    calculateSlice
+ } from '@/lib/redux';
+
 import {
     Container,
     Col,
@@ -26,6 +30,8 @@ import {
 } from 'downshift';
 
 export const TeamsSelector = () => {
+    const dispatch = useDispatch();
+
     type Team = {
         team_id: number;
         name: string;
@@ -48,7 +54,6 @@ export const TeamsSelector = () => {
     const prodURL = 'http://194.67.103.134:32769';
     const baseURL = localURL;
 
-    const dispatch = useDispatch()
     const [isOpen, setIsOpen] = useState(true);
     const toggleClass = isOpen ? '' : 'd-none d-sm-flex';
 
@@ -101,6 +106,8 @@ export const TeamsSelector = () => {
         onSelectedItemChange: ({ selectedItem }) => {
             setRadiantTeam(selectedItem ? selectedItem : null);
             setInputValueRadiant(selectedItem ? selectedItem.name : '');
+            dispatch(calculateSlice.actions.setRadiantTeam(selectedItem ? selectedItem.team_id : null));
+
             radiantTeamIsSelected = true;
             fetch(baseURL + '/api/v1.0/teams_gold_data/get_team_gold_data?team_id=' + selectedItem?.team_id)
                 .then(response => response.json())
@@ -172,6 +179,7 @@ export const TeamsSelector = () => {
         onSelectedItemChange: ({ selectedItem }) => {
             setDireTeam(selectedItem ? selectedItem : null);
             setInputValueDire(selectedItem ? selectedItem.name : '');
+            dispatch(calculateSlice.actions.setDireTeam(selectedItem ? selectedItem.team_id : null));
             direTeamIsSelected = true;
             fetch(baseURL + '/api/v1.0/teams_gold_data/get_team_gold_data?team_id=' + selectedItem?.team_id)
                 .then(response => response.json())
