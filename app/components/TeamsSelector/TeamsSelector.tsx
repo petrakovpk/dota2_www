@@ -12,6 +12,11 @@ import {
     useDispatch
 } from '@/lib/redux'
 
+import type {
+    Team,
+    TeamGoldData
+} from '@/lib/redux'
+
 import { 
     calculateSlice
  } from '@/lib/redux';
@@ -31,24 +36,6 @@ import {
 
 export const TeamsSelector = () => {
     const dispatch = useDispatch();
-
-    type Team = {
-        team_id: number;
-        name: string;
-        logo_url: string;
-        rating: number;
-        wins: number;
-        losses: number;
-    };
-
-    type TeamGoldData = {
-        team_id: number;
-        parameter_1: string;
-        parameter_2: string;
-        parameter_3: string;
-        parameter_4: string;
-        parameter_5: string;
-    };
 
     const localURL = 'http://127.0.0.1:7070';
     const prodURL = 'http://194.67.103.134:32769';
@@ -106,7 +93,7 @@ export const TeamsSelector = () => {
         onSelectedItemChange: ({ selectedItem }) => {
             setRadiantTeam(selectedItem ? selectedItem : null);
             setInputValueRadiant(selectedItem ? selectedItem.name : '');
-            dispatch(calculateSlice.actions.setRadiantTeam(selectedItem ? selectedItem.team_id : null));
+            dispatch(calculateSlice.actions.setRadiantTeam(selectedItem ? selectedItem : null));
 
             radiantTeamIsSelected = true;
             fetch(baseURL + '/api/v1.0/teams_gold_data/get_team_gold_data?team_id=' + selectedItem?.team_id)
@@ -179,7 +166,7 @@ export const TeamsSelector = () => {
         onSelectedItemChange: ({ selectedItem }) => {
             setDireTeam(selectedItem ? selectedItem : null);
             setInputValueDire(selectedItem ? selectedItem.name : '');
-            dispatch(calculateSlice.actions.setDireTeam(selectedItem ? selectedItem.team_id : null));
+            dispatch(calculateSlice.actions.setDireTeam(selectedItem ? selectedItem : null));
             direTeamIsSelected = true;
             fetch(baseURL + '/api/v1.0/teams_gold_data/get_team_gold_data?team_id=' + selectedItem?.team_id)
                 .then(response => response.json())

@@ -1,26 +1,47 @@
 /* Core */
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { getMatchGoldData } from './thunks'
+import type {
+    CalculateSliceState
+} from './types'
 
-export type MatchGoldData = {
-    team_radiant_id: number;
-    team_dire_id: number;
-    parameter_1: string;
-    parameter_2: string;
-    parameter_3: string;
-    parameter_4: string;
-    parameter_5: string;
-};
+import {
+    fetchMatchGoldDataAsync,
+    fetchMatchAiResultAsync
+} from './thunks'
+
+import type {
+    Team
+} from './types'
+
+import type {
+    ChartData
+} from 'chart.js';
+
+const initialChartData: ChartData = {
+    labels: ["Team Radiant", "Team Dire"],
+    datasets: [
+        {
+            data: [50, 50],
+            backgroundColor: [
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(255, 99, 132, 0.2)'
+            ]
+        },
+    ],
+}
 
 const initialState: CalculateSliceState = {
-    selected_team_radiant_id: null,
-    selected_team_dire_id: null,
+    selected_team_radiant: null,
+    selected_team_dire: null,
     selected_model: 'Stacked Ensamble',
-    result_is_loading: false,
-    result_team_radiant_id: null,
-    result_team_dire_id: null,
+    result_team_radiant: null,
+    result_team_dire: null,
     result_model: 'Stacked Ensamble',
-    result_match_gold_data: null
+    result_match_gold_data: null,
+    result_match_gold_data_is_loading: false,
+    result_math_ai_result: null,
+    result_chart_data: initialChartData,
+    result_chart_data_is_loading: false
 }
 
 export const calculateSlice = createSlice({
@@ -28,49 +49,72 @@ export const calculateSlice = createSlice({
     initialState,
 
     reducers: {
-        setRadiantTeam: (state, action: PayloadAction<number | null>) => {
-            console.log('set radiant team id');
-            state.selected_team_radiant_id = action.payload;
+        setRadiantTeam: (state, action: PayloadAction<Team | null>) => {
+            state.selected_team_radiant = action.payload;
         },
-        setDireTeam: (state, action: PayloadAction<number | null>) => {
-            console.log('set dire team id');
-            state.selected_team_dire_id = action.payload;
+        setDireTeam: (state, action: PayloadAction<Team | null>) => {
+            state.selected_team_dire = action.payload;
         },
         setModel: (state, action: PayloadAction<string>) => {
             console.log('set dire team id');
             state.selected_model = action.payload;
         },
         calculate: (state) => {
+            console.log("работаем")
             state.result_model = state.selected_model
-            state.result_team_radiant_id = state.selected_team_radiant_id
-            state.result_team_dire_id = state.selected_team_dire_id
-            console.log('calculate result_team_radiant_id', state.result_team_radiant_id)
-            console.log('calculate result_team_radiant_id', state.selected_team_radiant_id)
-            console.log('calculate result_team_dire_id', state.result_team_dire_id)
-            console.log('calculate result_team_dire_id', state.selected_team_dire_id)
+            state.result_team_radiant = state.selected_team_radiant
+            state.result_team_dire = state.selected_team_dire
         }
     },
-    
+
     extraReducers: (builder) => {
         builder
-            .addCase(getMatchGoldData.pending, (state) => {
-                state.result_is_loading = true
+            .addCase(fetchMatchGoldDataAsync.pending, (state) => {
+                state.result_match_gold_data_is_loading = true
             })
-            .addCase(getMatchGoldData.fulfilled, (state, action) => {
-                state.result_is_loading = false
+            .addCase(fetchMatchGoldDataAsync.fulfilled, (state, action) => {
+                state.result_match_gold_data_is_loading = false
                 state.result_match_gold_data = action.payload
             })
+            .addCase(fetchMatchGoldDataAsync.rejected, (state, action) => {
+                state.result_match_gold_data_is_loading = false
+            })
+
+            .addCase(fetchMatchAiResultAsync.pending, (state) => {
+                state.result_chart_data_is_loading = true
+                console.log('fetching ai result')
+            })
+            .addCase(fetchMatchAiResultAsync.fulfilled, (state, action) => {
+                state.result_chart_data_is_loading = false
+                state.result_math_ai_result = action.payload
+
+                let roundedP0: number = 0
+                let roundedP1: number = 1
+
+                if (state.result_math_ai_result.is_radiant_win = false ) {
+                    roundedP0 = Math.round(state.result_math_ai_result.p0 * 10000) / 100;
+                    roundedP1 = Math.round(state.result_math_ai_result.p1 * 10000) / 100;
+                } else {
+                    roundedP0 = Math.round(state.result_math_ai_result.p1 * 10000) / 100;
+                    roundedP1 = Math.round(state.result_math_ai_result.p0 * 10000) / 100;
+                }
+
+                state.result_chart_data.datasets = [
+                    {
+                        data: [roundedP0, roundedP1],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(255, 99, 132, 0.2)'
+                        ]
+                    }
+                ]
+
+            })
+            .addCase(fetchMatchAiResultAsync.rejected, (state, action) => {
+                state.result_chart_data_is_loading = false
+                console.log('error', action.error)
+            })
     },
+
 })
 
-/* Types */
-export interface CalculateSliceState {
-    selected_team_radiant_id: number | null
-    selected_team_dire_id: number | null
-    selected_model: string
-    result_is_loading: boolean,
-    result_team_radiant_id: number | null
-    result_team_dire_id: number | null
-    result_model: string
-    result_match_gold_data: MatchGoldData | null
-}

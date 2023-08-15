@@ -24,6 +24,7 @@ import {
     Title,
     Tooltip,
     Legend,
+    ChartData,
 } from 'chart.js';
 
 import { Bar } from 'react-chartjs-2';
@@ -49,67 +50,48 @@ interface FooContext extends Context {
     foo?: number;
 }
 
-// const data = {
-//     labels: ['Team Radiant', 'Team Dire'],
-//     datasets: [
-//         {
-//             data: [70, 30],
-//             backgroundColor: [
-//                 'rgba(75, 192, 192, 0.2)',
-//                 'rgba(255, 99, 132, 0.2)'
-//             ]
-//         },
-
-//     ],
-// };
-
-// export const options = {
-//     responsive: true,
-//     legend: {
-//         display: false
-//     },
-//     scales: {
-//         y: {
-//             beginAtZero: true
-//         }
-//     },
-//     plugins: {
-//         datalabels: {
-//             color: '#000000',
-//             anchor: 'center', // Измените якорь на "center", чтобы центрировать метки данных над столбцами
-//             align: 'top', // Выровнять метки данных по верхней части столбцов
-//             offset: 0, // Добавьте небольшой отступ, чтобы поднять метки данных над столбцами
-//             formatter: (value: number) => {
-//                 return value + '%'; // Форматирование значения
-//             }
-//         },
-//         maintainAspectRatio: false,
-//         responsive: true,
-//         legend: {
-//             display: false
-//         }
-//     }
-// };
 
 export const Result = () => {
-    const resultIsLoading = useSelector((state: ReduxState) => state.calculate.result_is_loading)
-    const model = useSelector((state: ReduxState) => state.calculate.result_model)
-    const team_radiant = useSelector((state: ReduxState) => state.calculate.result_team_radiant_id)
-    const team_dire = useSelector((state: ReduxState) => state.calculate.result_team_dire_id)
-
-    type MatchGoldData = {
-        team_radiant_id: number;
-        team_dire_id: number;
-        parameter_1: string;
-        parameter_2: string;
-        parameter_3: string;
-        parameter_4: string;
-        parameter_5: string;
-    };
+    const result_is_loading = useSelector((state: ReduxState) => state.calculate.result_is_loading)
+    const result_match_gold_data = useSelector((state: ReduxState) => state.calculate.result_match_gold_data)
+    const result_chart_data = useSelector((state: ReduxState) => state.calculate.result_chart_data)
 
     const localURL = 'http://127.0.0.1:7070';
     const prodURL = 'http://194.67.103.134:32769';
     const baseURL = localURL;
+
+    useEffect(() => {
+        console.log("result_chart_data changed:", result_chart_data);
+    }, [result_chart_data]);
+
+    const options = {
+        responsive: true,
+        legend: {
+            display: false
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            datalabels: {
+                color: '#000000',
+                anchor: 'center', // Измените якорь на "center", чтобы центрировать метки данных над столбцами
+                align: 'top', // Выровнять метки данных по верхней части столбцов
+                offset: 0, // Добавьте небольшой отступ, чтобы поднять метки данных над столбцами
+                formatter: (value: number) => {
+                    return value + '%'; // Форматирование значения
+                }
+            },
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {
+                display: false
+            }
+
+        }
+    };
 
     return (
         <Container fluid="md" className='border border-black rounded h-100 p-3' style={{ backgroundColor: '#f8f9fa' }}>
@@ -122,7 +104,7 @@ export const Result = () => {
                         <p className='text-center' style={{ fontWeight: 500 }}>Вероятность победы</p>
                     </Row>
                     <Row>
-                        {/* <Bar options={options} /> использование chartData */}
+                        <Bar options={options} data={result_chart_data} />
                     </Row>
                 </Col>
                 <Col xs={12} md={6} className='pagination-centered'>
@@ -131,14 +113,15 @@ export const Result = () => {
                     </Row>
                     <Row>
                         <ul>
-                            <li>{resultIsLoading ? 'Загрузка...' : 'Данные загружены'}</li>
-                            <li>{model}</li>
-                            <li>{team_radiant}</li>
-                            <li>{team_dire}</li>
+                            <li>{result_match_gold_data?.parameter_1}</li>
+                            <li>{result_match_gold_data?.parameter_2}</li>
+                            <li>{result_match_gold_data?.parameter_3}</li>
+                            <li>{result_match_gold_data?.parameter_4}</li>
+                            <li>{result_match_gold_data?.parameter_5}</li>
                         </ul>
                     </Row>
                 </Col>
-            </Row>
-        </Container>
+            </Row >
+        </Container >
     )
 }
