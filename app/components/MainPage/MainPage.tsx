@@ -19,9 +19,11 @@ import { Result } from '../Result/Result';
 
 export const MainPage = () => {
     return (
-        <Container className='h-100 mt-5'>
-
-            <Row className='mt-2'>
+        <Container className='h-100 mt-2'>
+            <Row className="mt-2 text-center">
+                <p style={{ fontWeight: 'bold' }}>Лаборатория Dota 2</p>
+            </Row>
+            <Row className='mt-0'>
                 <Col md={12}>
                     <TeamsSelector />
                 </Col>

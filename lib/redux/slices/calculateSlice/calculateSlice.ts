@@ -1,6 +1,8 @@
 /* Core */
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type {
+    Team,
+    Model,
     CalculateSliceState
 } from './types'
 
@@ -9,8 +11,8 @@ import {
     fetchMatchAiResultAsync
 } from './thunks'
 
-import type {
-    Team
+import {
+    models
 } from './types'
 
 import type {
@@ -33,10 +35,10 @@ const initialChartData: ChartData = {
 const initialState: CalculateSliceState = {
     selected_team_radiant: null,
     selected_team_dire: null,
-    selected_model: 'Stacked Ensamble',
+    selected_model: models[0],
     result_team_radiant: null,
     result_team_dire: null,
-    result_model: 'Stacked Ensamble',
+    result_model: models[0],
     result_match_gold_data: null,
     result_match_gold_data_is_loading: false,
     result_math_ai_result: null,
@@ -55,7 +57,7 @@ export const calculateSlice = createSlice({
         setDireTeam: (state, action: PayloadAction<Team | null>) => {
             state.selected_team_dire = action.payload;
         },
-        setModel: (state, action: PayloadAction<string>) => {
+        setModel: (state, action: PayloadAction<Model>) => {
             console.log('set dire team id');
             state.selected_model = action.payload;
         },
@@ -71,6 +73,7 @@ export const calculateSlice = createSlice({
         builder
             .addCase(fetchMatchGoldDataAsync.pending, (state) => {
                 state.result_match_gold_data_is_loading = true
+                state.result_match_gold_data = null
             })
             .addCase(fetchMatchGoldDataAsync.fulfilled, (state, action) => {
                 state.result_match_gold_data_is_loading = false
@@ -78,6 +81,7 @@ export const calculateSlice = createSlice({
             })
             .addCase(fetchMatchGoldDataAsync.rejected, (state, action) => {
                 state.result_match_gold_data_is_loading = false
+                state.result_match_gold_data = null
             })
 
             .addCase(fetchMatchAiResultAsync.pending, (state) => {
@@ -91,7 +95,7 @@ export const calculateSlice = createSlice({
                 let roundedP0: number = 0
                 let roundedP1: number = 1
 
-                if (state.result_math_ai_result.is_radiant_win = false ) {
+                if (state.result_math_ai_result.is_radiant_win = false) {
                     roundedP0 = Math.round(state.result_math_ai_result.p0 * 10000) / 100;
                     roundedP1 = Math.round(state.result_math_ai_result.p1 * 10000) / 100;
                 } else {

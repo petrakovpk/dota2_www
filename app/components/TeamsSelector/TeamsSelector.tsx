@@ -1,45 +1,19 @@
 'use client'
 
 import 'holderjs'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from '@/lib/redux'
+import type { Team, TeamGoldData } from '@/lib/redux'
+import { calculateSlice } from '@/lib/redux'
+import { Container, Col, Row, Form, Image, Button } from 'react-bootstrap'
+import { useCombobox } from 'downshift'
 
-import {
-    useState,
-    useEffect
-} from 'react';
-
-import {
-    useSelector,
-    useDispatch
-} from '@/lib/redux'
-
-import type {
-    Team,
-    TeamGoldData
-} from '@/lib/redux'
-
-import { 
-    calculateSlice
- } from '@/lib/redux';
-
-import {
-    Container,
-    Col,
-    Row,
-    Form,
-    Image,
-    Button
-} from 'react-bootstrap'
-
-import {
-    useCombobox
-} from 'downshift';
+const LOCAL_URL = 'http://127.0.0.1:7070'
+const PROD_URL = 'https://194.67.103.134:32769'
+const BASE_URL = PROD_URL
 
 export const TeamsSelector = () => {
     const dispatch = useDispatch();
-
-    const localURL = 'http://127.0.0.1:7070';
-    const prodURL = 'http://194.67.103.134:32769';
-    const baseURL = localURL;
 
     const [isOpen, setIsOpen] = useState(true);
     const toggleClass = isOpen ? '' : 'd-none d-sm-flex';
@@ -67,7 +41,7 @@ export const TeamsSelector = () => {
 
     useEffect(() => {
         console.log('Fetching data...');
-        fetch(baseURL + '/api/v1.0/teams/get_teams?limit=10')
+        fetch(BASE_URL + '/api/v1.0/teams/get_teams?limit=10')
             .then(response => response.json())
             .then(data => {
                 console.log('Data received:', data);
@@ -96,7 +70,7 @@ export const TeamsSelector = () => {
             dispatch(calculateSlice.actions.setRadiantTeam(selectedItem ? selectedItem : null));
 
             radiantTeamIsSelected = true;
-            fetch(baseURL + '/api/v1.0/teams_gold_data/get_team_gold_data?team_id=' + selectedItem?.team_id)
+            fetch(BASE_URL + '/api/v1.0/teams_gold_data/get_team_gold_data?team_id=' + selectedItem?.team_id)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Data received:', data);
@@ -118,7 +92,7 @@ export const TeamsSelector = () => {
             if (inputValue) {
                 setIsRadiantLoading(true); // Начало загрузки
                 setSearchTimeoutRadiant(setTimeout(() => {
-                    fetch(baseURL + `/api/v1.0/teams/find_team?team_name=${inputValue}&limit=5`)
+                    fetch(BASE_URL + `/api/v1.0/teams/find_team?team_name=${inputValue}&limit=5`)
                         .then(response => response.json())
                         .then(data => {
                             console.log('Data received:', data);
@@ -132,7 +106,7 @@ export const TeamsSelector = () => {
                 }, 500));
             } else {
                 setIsRadiantLoading(true); // Начало загрузки
-                fetch(baseURL + '/api/v1.0/teams/get_teams?limit=10')
+                fetch(BASE_URL + '/api/v1.0/teams/get_teams?limit=10')
                     .then(response => response.json())
                     .then(data => {
                         console.log('Data received:', data);
@@ -168,7 +142,7 @@ export const TeamsSelector = () => {
             setInputValueDire(selectedItem ? selectedItem.name : '');
             dispatch(calculateSlice.actions.setDireTeam(selectedItem ? selectedItem : null));
             direTeamIsSelected = true;
-            fetch(baseURL + '/api/v1.0/teams_gold_data/get_team_gold_data?team_id=' + selectedItem?.team_id)
+            fetch(BASE_URL + '/api/v1.0/teams_gold_data/get_team_gold_data?team_id=' + selectedItem?.team_id)
                 .then(response => response.json())
                 .then(data => {
                     console.log('Data received:', data);
@@ -190,7 +164,7 @@ export const TeamsSelector = () => {
             if (inputValue) {
                 setIsDireLoading(true); // Начало загрузки
                 setSearchTimeoutDire(setTimeout(() => {
-                    fetch(baseURL + `/api/v1.0/teams/find_team?team_name=${inputValue}&limit=5`)
+                    fetch(BASE_URL + `/api/v1.0/teams/find_team?team_name=${inputValue}&limit=5`)
                         .then(response => response.json())
                         .then(data => {
                             console.log('Data received:', data);
@@ -204,7 +178,7 @@ export const TeamsSelector = () => {
                 }, 500));
             } else {
                 setIsDireLoading(true); // Начало загрузки
-                fetch(baseURL + '/api/v1.0/teams/get_teams?limit=10')
+                fetch(BASE_URL + '/api/v1.0/teams/get_teams?limit=10')
                     .then(response => response.json())
                     .then(data => {
                         console.log('Data received:', data);
@@ -333,11 +307,17 @@ export const TeamsSelector = () => {
                         </Col>
                         <Col xs={12} sm={6}>
                             <ul className='no-bullets'>
-                                <li>{radiantTeamGoldData?.parameter_1}</li>
-                                <li>{radiantTeamGoldData?.parameter_2}</li>
-                                <li>{radiantTeamGoldData?.parameter_3}</li>
-                                <li>{radiantTeamGoldData?.parameter_4}</li>
-                                <li>{radiantTeamGoldData?.parameter_5}</li>
+                                {radiantTeamGoldData ? (
+                                    <>
+                                        <li>{radiantTeamGoldData.parameter_1}</li>
+                                        <li>{radiantTeamGoldData.parameter_2}</li>
+                                        <li>{radiantTeamGoldData.parameter_3}</li>
+                                        <li>{radiantTeamGoldData.parameter_4}</li>
+                                        <li>{radiantTeamGoldData.parameter_5}</li>
+                                    </>
+                                ) : (
+                                    radiantTeam && <li>Для этой команды мы еще не рассчитали параметры</li>
+                                )}
                             </ul>
                         </Col>
                     </Row>
@@ -361,11 +341,17 @@ export const TeamsSelector = () => {
                         </Col>
                         <Col xs={12} sm={6}>
                             <ul className='no-bullets'>
-                                <li>{direTeamGoldData?.parameter_1}</li>
-                                <li>{direTeamGoldData?.parameter_2}</li>
-                                <li>{direTeamGoldData?.parameter_3}</li>
-                                <li>{direTeamGoldData?.parameter_4}</li>
-                                <li>{direTeamGoldData?.parameter_5}</li>
+                                {direTeam && direTeamGoldData ? (
+                                    <>
+                                        <li>{direTeamGoldData.parameter_1}</li>
+                                        <li>{direTeamGoldData.parameter_2}</li>
+                                        <li>{direTeamGoldData.parameter_3}</li>
+                                        <li>{direTeamGoldData.parameter_4}</li>
+                                        <li>{direTeamGoldData.parameter_5}</li>
+                                    </>
+                                ) : (
+                                    direTeam && <li>Для этой команды мы еще не рассчитали параметры</li>
+                                )}
                             </ul>
                         </Col>
                     </Row>

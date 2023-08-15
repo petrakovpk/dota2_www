@@ -52,7 +52,6 @@ interface FooContext extends Context {
 
 
 export const Result = () => {
-    const result_is_loading = useSelector((state: ReduxState) => state.calculate.result_is_loading)
     const result_match_gold_data = useSelector((state: ReduxState) => state.calculate.result_match_gold_data)
     const result_chart_data = useSelector((state: ReduxState) => state.calculate.result_chart_data)
 
@@ -112,13 +111,18 @@ export const Result = () => {
                         <p className='text-center' style={{ fontWeight: 500 }}>Вероятные события матча</p>
                     </Row>
                     <Row>
-                        <ul>
-                            <li>{result_match_gold_data?.parameter_1}</li>
-                            <li>{result_match_gold_data?.parameter_2}</li>
-                            <li>{result_match_gold_data?.parameter_3}</li>
-                            <li>{result_match_gold_data?.parameter_4}</li>
-                            <li>{result_match_gold_data?.parameter_5}</li>
-                        </ul>
+                        {result_match_gold_data ? (
+                            <ul>
+                                <li>{result_match_gold_data?.parameter_1}</li>
+                                <li>{result_match_gold_data?.parameter_2}</li>
+                                <li>{result_match_gold_data?.parameter_3}</li>
+                                <li>{result_match_gold_data?.parameter_4}</li>
+                                <li>{result_match_gold_data?.parameter_5}</li>
+                            </ul>
+                        ) : (
+                            <li>Для этого матча мы еще не рассчитали параметры</li>
+                        )
+                        }
                     </Row>
                 </Col>
             </Row >

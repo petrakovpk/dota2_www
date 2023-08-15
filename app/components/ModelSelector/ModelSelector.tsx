@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { calculateSlice } from '@/lib/redux';
+
 
 import {
     Button,
@@ -14,33 +14,11 @@ import {
     Collapse
 } from 'react-bootstrap'
 
+import { calculateSlice, models } from '@/lib/redux';
+import type { Model } from '@/lib/redux';
 
 export const ModelSelector = () => {
     const dispatch = useDispatch();
-
-    type Model = {
-        name: string;
-        description: string;
-        accuracy: string;
-    };
-
-    const models = [
-        {
-            name: 'Stacked Ensamble',
-            description: 'Комбинация различных моделей для улучшения точности.',
-            accuracy: '62%'
-        },
-        {
-            name: 'Deep Learning',
-            description: 'Использует нейронные сети для обучения сложным паттернам в данных.',
-            accuracy: '65%'
-        },
-        {
-            name: 'GBM',
-            description: 'Gradient Boosting Machine, алгоритм, который строит модель предсказания в форме ансамбля слабых предсказательных моделей.',
-            accuracy: '63%'
-        }
-    ];
 
     const [isOpen, setIsOpen] = useState(true);
     const [selectedModel, setSelectedModel] = useState<Model>(models[0]);
@@ -49,7 +27,7 @@ export const ModelSelector = () => {
 
     const handleSelectModel = (model: Model) => {
         setSelectedModel(model);
-        dispatch(calculateSlice.actions.setModel(model.name));
+        dispatch(calculateSlice.actions.setModel(model));
     }
 
     return (

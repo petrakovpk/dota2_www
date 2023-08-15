@@ -2,9 +2,9 @@ import type {
     MatchAiResult
 } from './types'
 
-const localURL = 'http://127.0.0.1:8080';
-const prodURL = 'http://194.67.103.134:32769';
-const baseURL = localURL;
+const LOCAL_URL = 'http://127.0.0.1:8080';
+const PROD_URL = 'http://194.67.103.134:32769';
+const BASE_URL = PROD_URL;
 
 export const fetchMatchAiResult = async (
     model: string,
@@ -12,7 +12,7 @@ export const fetchMatchAiResult = async (
     dire_rating: number,
 ): Promise<MatchAiResult> => {
     const response = await fetch(
-        baseURL + `/api/predict?model=${model}&radiantRating=${radiant_rating}&direRating=${dire_rating}`,
+        BASE_URL + `/api/predict?model=${model}&radiantRating=${radiant_rating}&direRating=${dire_rating}`,
         {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
