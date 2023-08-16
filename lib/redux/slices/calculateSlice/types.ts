@@ -54,7 +54,7 @@ export interface CalculateSliceState {
   result_match_gold_data: MatchGoldData | null
   result_match_gold_data_is_loading: boolean
   result_math_ai_result: MatchAiResult | null
-  result_chart_data: ChartData
+  result_chart_data: ChartData<"bar">
   result_chart_data_is_loading: boolean
 }
 

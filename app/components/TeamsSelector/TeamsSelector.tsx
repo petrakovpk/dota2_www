@@ -9,7 +9,7 @@ import { Container, Col, Row, Form, Image, Button } from 'react-bootstrap'
 import { useCombobox } from 'downshift'
 
 const LOCAL_URL = 'http://127.0.0.1:7070'
-const PROD_URL = 'https://194.67.103.134:32769'
+const PROD_URL = 'https://api.dota2-lab.ru'
 const BASE_URL = PROD_URL
 
 export const TeamsSelector = () => {

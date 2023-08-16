@@ -3,7 +3,7 @@ import type {
 } from './types'
 
 const LOCAL_URL = 'http://127.0.0.1:8080';
-const PROD_URL = 'http://194.67.103.134:32769';
+const PROD_URL = 'https://ai.dota2-lab.ru';
 const BASE_URL = PROD_URL;
 
 export const fetchMatchAiResult = async (

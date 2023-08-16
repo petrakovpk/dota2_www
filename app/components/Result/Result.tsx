@@ -1,9 +1,8 @@
 'use client'
 
 import React, {
-    useEffect,
     useRef,
-    useState
+    useEffect
 } from 'react';
 
 import {
@@ -29,12 +28,9 @@ import {
 
 import { Bar } from 'react-chartjs-2';
 
-import { Context } from 'chartjs-plugin-datalabels';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import { ReduxState } from 'lib/redux/store';
-import { stat } from 'fs';
-
 
 Chart.register(
     CategoryScale,
@@ -43,25 +39,12 @@ Chart.register(
     Title,
     Tooltip,
     Legend,
-    ChartDataLabels
+    ChartDataLabels,
 );
-
-interface FooContext extends Context {
-    foo?: number;
-}
-
 
 export const Result = () => {
     const result_match_gold_data = useSelector((state: ReduxState) => state.calculate.result_match_gold_data)
     const result_chart_data = useSelector((state: ReduxState) => state.calculate.result_chart_data)
-
-    const localURL = 'http://127.0.0.1:7070';
-    const prodURL = 'http://194.67.103.134:32769';
-    const baseURL = localURL;
-
-    useEffect(() => {
-        console.log("result_chart_data changed:", result_chart_data);
-    }, [result_chart_data]);
 
     const options = {
         responsive: true,
@@ -76,8 +59,8 @@ export const Result = () => {
         plugins: {
             datalabels: {
                 color: '#000000',
-                anchor: 'center', // Измените якорь на "center", чтобы центрировать метки данных над столбцами
-                align: 'top', // Выровнять метки данных по верхней части столбцов
+                anchor: "center" as const, // Измените якорь на "center", чтобы центрировать метки данных над столбцами
+                align: 'top' as const, // Выровнять метки данных по верхней части столбцов
                 offset: 0, // Добавьте небольшой отступ, чтобы поднять метки данных над столбцами
                 formatter: (value: number) => {
                     return value + '%'; // Форматирование значения
@@ -103,7 +86,7 @@ export const Result = () => {
                         <p className='text-center' style={{ fontWeight: 500 }}>Вероятность победы</p>
                     </Row>
                     <Row>
-                        <Bar options={options} data={result_chart_data} />
+                        {/* <Bar options={options} data={result_chart_data} /> */}
                     </Row>
                 </Col>
                 <Col xs={12} md={6} className='pagination-centered'>

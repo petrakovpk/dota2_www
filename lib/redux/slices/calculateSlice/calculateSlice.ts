@@ -19,7 +19,7 @@ import type {
     ChartData
 } from 'chart.js';
 
-const initialChartData: ChartData = {
+const initialChartData: ChartData<"bar"> = {
     labels: ["Team Radiant", "Team Dire"],
     datasets: [
         {
@@ -58,11 +58,9 @@ export const calculateSlice = createSlice({
             state.selected_team_dire = action.payload;
         },
         setModel: (state, action: PayloadAction<Model>) => {
-            console.log('set dire team id');
             state.selected_model = action.payload;
         },
         calculate: (state) => {
-            console.log("работаем")
             state.result_model = state.selected_model
             state.result_team_radiant = state.selected_team_radiant
             state.result_team_dire = state.selected_team_dire
